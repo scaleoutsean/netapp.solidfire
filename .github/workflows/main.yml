@@ -49,8 +49,8 @@ jobs:
           rsync -av . ansible_collections/community/solidfire/ --exclude ansible_collections/community/solidfire/
 
       - name: Run sanity tests Solidfire
-        run: ansible-test sanity --docker -v --color
+        run: ansible-test sanity --docker -v --color --python 3.12
         working-directory: ansible_collections/community/solidfire/
       - name: Run Unit Tests
-        run: ansible-test units --docker -v --color
+        run: ansible-test units --docker -v --color --python 3.12
         working-directory: ansible_collections/community/solidfire/

@@ -110,6 +110,25 @@ class MockSFConnection(object):
         drive_list = self.Bunch(drives=drives)
         return drive_list
 
+    def list_initiators(self, *args, **kwargs):  # pylint: disable=unused-argument
+        ''' build initiator list for cluster_initiators subset '''
+        self.record(repr(args), repr(kwargs))
+        initiators = list()
+        initiators.append({
+            'alias': 's194',
+            'attributes': {'proxmox': True},
+            'chapUsername': None,
+            'initiatorID': 10,
+            'initiatorName': 'iqn.1993-08.org.debian:01:3d6ce3bd67ac',
+            'initiatorSecret': None,
+            'requireChap': False,
+            'targetSecret': None,
+            'virtualNetworkIDs': [],
+            'volumeAccessGroups': [1]
+        })
+        initiator_list = self.Bunch(initiators=initiators)
+        return initiator_list
+
     def get_config(self, *args, **kwargs):  # pylint: disable=unused-argument
         self.record(repr(args), repr(kwargs))
         if self.force_error and self.where == 'get_config_exception':
