@@ -34,7 +34,7 @@ options:
     description:
       - list of subsets to gather from target cluster or node
       - supported values
-      - node_config, cluster_accounts, cluster_nodes, cluster_drives 
+      - node_config, cluster_accounts, cluster_nodes, cluster_drives
       - additional values
       - all - for all subsets,
       - all_clusters - all subsets at cluster scope,
