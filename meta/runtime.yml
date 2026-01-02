@@ -1,5 +1,5 @@
 ---
-requires_ansible: ">=2.20"
+requires_ansible: ">=2.20.1"
 action_groups:
   netapp_elementsw:
     - na_elementsw_access_group

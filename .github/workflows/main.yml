@@ -25,8 +25,13 @@ jobs:
         with:          
           python-version: 3.12
 
-      - name: Install ansible (${{ matrix.ansible }})
-        run: pip install https://github.com/ansible/ansible/archive/${{ matrix.ansible }}.tar.gz --disable-pip-version-check
+      - name: Install ansible-core for stable matrix
+        if: matrix.ansible == 'stable-2.20'
+        run: pip install 'ansible-core==2.20.1' --disable-pip-version-check
+
+      - name: Install ansible from devel for devel matrix
+        if: matrix.ansible == 'devel'
+        run: pip install https://github.com/ansible/ansible/archive/devel.tar.gz --disable-pip-version-check
 
       - name: Cleanup workspace
         run: |
