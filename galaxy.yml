@@ -3,12 +3,13 @@ name: "solidfire"
 version: "26.1.0"
 authors:
     - "scaleoutSean (@scaleoutsean)"
+    - NetApp, Inc.
 license: "GPL-2.0-or-later"
 readme: README.md
-description: Netapp ElementSW (Solidfire) Collection
+description: Community SolidFire Collection
 repository: https://github.com/scaleoutsenan/netapp.solidfire
 issues: https://github.com/scaleoutsenan/netapp.solidfire/issues
-homepage: https://scaleoutsean.github.io.
+homepage: https://scaleoutsean.github.io
 tags:
     - storage
     - netapp

@@ -46,7 +46,7 @@ jobs:
         run: |
           pwd
           mkdir -p ansible_collections/community/solidfire/
-          rsync -av . ansible_collections/community/solidfire/ --exclude ansible_collections/community/solidfire/
+          rsync -av . ansible_collections/community/solidfire/ --exclude ansible_collections/community/solidfire/ --exclude .github --exclude .git
 
       - name: Run sanity tests Solidfire
         run: ansible-test sanity --docker -v --color

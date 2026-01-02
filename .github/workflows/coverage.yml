@@ -36,7 +36,7 @@ jobs:
         run: |
           pwd
           mkdir -p ansible_collections/community/solidfire/
-          rsync -av . ansible_collections/community/solidfire/ --exclude ansible_collections/community/solidfire/
+          rsync -av . ansible_collections/community/solidfire/ --exclude ansible_collections/community/solidfire/ --exclude .github --exclude .git
 
       - name: Run Unit Tests
         # https://docs.ansible.com/projects/ansible-core/2.20/porting_guides/porting_guide_core_2.20.html

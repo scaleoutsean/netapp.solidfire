@@ -1,28 +1,43 @@
-[![Documentation](https://img.shields.io/badge/docs-brightgreen.svg)](https://docs.ansible.com/ansible/devel/collections/netapp/elementsw/index.html)
-![example workflow](https://github.com/ansible-collections/netapp.elementsw/actions/workflows/main.yml/badge.svg)
-[![codecov](https://codecov.io/gh/ansible-collections/netapp.elementsw/branch/main/graph/badge.svg?token=weBYkksxSi)](https://codecov.io/gh/ansible-collections/netapp.elementsw)
-[![Discord](https://img.shields.io/discord/855068651522490400)](https://discord.gg/NetApp)
+netapp.solidfire
 
+Community SolidFire Collection
 
-netapp.elementSW
-
-NetApp ElementSW Collection
-
-Copyright (c) 2019 NetApp, Inc. All rights reserved.
-Specifications subject to change without notice.
+Copyright (c) 2019 scaleoutSean, NetApp, Inc. All rights reserved.
 
 # Installation
-```bash
-ansible-galaxy collection install netapp.elementsw
-```
-To use Collection add the following to the top of your playbook, with out this you will be using Ansible 2.9 version of the module
-```
+
+To use this collection in your playbook add the following at the top of your playbook:
+
+```yaml
 collections:
-  - netapp.elementsw
+  - community.solidfire
+```
+
+Local installation (development)
+
+If you do not plan to publish the fork and just want to use it locally, build and install the collection into your local Ansible collections path:
+
+```bash
+cd /home/sean/code/netapp.solidfire
+ansible-galaxy collection build  # creates community-solidfire-<version>.tar.gz
+ansible-galaxy collection install ./community-solidfire-*.tar.gz --force
+```
+
+Alternatively, for development you can symlink the checkout into your local collections path so edits are picked up immediately:
+
+```bash
+mkdir -p ~/.ansible/collections/ansible_collections/community/
+ln -s /home/sean/code/netapp.solidfire ~/.ansible/collections/ansible_collections/community/solidfire
+```
+
+Or run Ansible with an explicit collections path for a single run:
+
+```bash
+ANSIBLE_COLLECTIONS_PATHS=/home/sean/code/netapp.solidfire ansible-playbook site.yml
 ```
 
 # Module documentation
-https://docs.ansible.com/ansible/devel/collections/netapp/elementsw/
+https://docs.ansible.com/ansible/devel/collections/netapp/elementsw/ [pre-fork]
 
 # Release Notes
 
@@ -32,6 +47,7 @@ https://docs.ansible.com/ansible/devel/collections/netapp/elementsw/
 
   - na_elementsw_info - add ``cluster_initiators``.
   - `autopep8` fix line length (above 160).
+  - Various style fixes for `ansible-test sanity`
 
 ## 21.7.0
 
