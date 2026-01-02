@@ -98,7 +98,7 @@ class TestMyModule(unittest.TestCase):
         module_args = {}
         module_args.update(self.set_default_args())
         ntp_dict = {'set_ntp_info': {
-                'ntp_servers': ['1.1.1.1']}}
+            'ntp_servers': ['1.1.1.1']}}
         module_args.update(ntp_dict)
         set_module_args(module_args)
         my_obj = my_module()
