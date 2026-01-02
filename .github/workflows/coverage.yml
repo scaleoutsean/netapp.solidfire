@@ -20,9 +20,9 @@ jobs:
         with:
           python-version: 3.12
 
-      - name: Install Ansible stable-2.20.1
-        # run: pip install https://github.com/ansible/ansible/archive/stable-2.20.1.tar.gz --disable-pip-version-check
-        run: pip install ansible==2.20.1 --disable-pip-version-check
+      - name: Install Ansible stable-2.20
+        # run: pip install https://github.com/ansible/ansible/archive/stable-2.20.tar.gz --disable-pip-version-check
+        run: pip install ansible==2.20 --disable-pip-version-check
 
       - name: Cleanup workspace
         run: |
