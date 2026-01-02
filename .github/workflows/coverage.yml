@@ -1,0 +1,47 @@
+name: NetApp.elementsw Ansible Coverage
+
+on:
+  push:
+  # pull_request:
+  # schedule:
+  #   - cron: '0 6 * * *'
+
+jobs:
+  sanity:
+    name: Coverage on SolidFire
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.12
+
+      - name: Install Ansible stable-2.20
+        run: pip install https://github.com/ansible/ansible/archive/stable-2.20.tar.gz --disable-pip-version-check
+
+      - name: Make directory to make ansible-test happy
+        run: |
+          pwd
+          mkdir -p ansible_collections/community/solidfire/
+          rsync -av . ansible_collections/community/solidfire/ --exclude ansible_collections/community/solidfire/
+
+      - name: Run Unit Tests
+        # https://docs.ansible.com/projects/ansible-core/2.20/porting_guides/porting_guide_core_2.20.html
+        # Minimum version: python 3.12+
+        run: ansible-test units --coverage --color --docker --python 3.12
+        working-directory: ansible_collections/netapp/elementsw/
+
+        # ansible-test support producing code coverage date
+      - name: Generate coverage report
+        run: ansible-test coverage xml -v --requirements --group-by command --group-by version
+        working-directory: ansible_collections/community/solidfire/
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          working-directory: ansible_collections/community/solidfire/
+          verbose: true

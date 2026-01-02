@@ -1,0 +1,42 @@
+name: community.solidfire Ansible CI
+
+on:
+  push:
+  # pull_request:
+  # schedule:
+  #  - cron: '0 6 * * *'
+
+jobs:
+  sanity:
+    name: Sanity (${{ matrix.ansible }} on Solidfire
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ansible:
+          - stable-2.20
+          - devel
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:          
+          python-version: 3.12
+
+      - name: Install ansible (${{ matrix.ansible }})
+        run: pip install https://github.com/ansible/ansible/archive/${{ matrix.ansible }}.tar.gz --disable-pip-version-check
+
+      - name: Make directory to make ansible-test happy
+        run: |
+          pwd
+          mkdir -p ansible_collections/community/solidfire/
+          rsync -av . ansible_collections/community/solidfire/ --exclude ansible_collections/community/solidfire/
+
+      - name: Run sanity tests Solidfire
+        run: ansible-test sanity --docker -v --color
+        working-directory: ansible_collections/community/solidfire/
+      - name: Run Unit Tests
+        run: ansible-test units --docker -v --color
+        working-directory: ansible_collections/community/solidfire/
