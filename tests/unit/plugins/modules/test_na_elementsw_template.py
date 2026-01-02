@@ -5,16 +5,16 @@ __metaclass__ = type
 import json
 import pytest
 
-from ansible_collections.netapp.elementsw.tests.unit.compat import unittest
-from ansible_collections.netapp.elementsw.tests.unit.compat.mock import patch
+from ansible_collections.community.solidfire.tests.unit.compat import unittest
+from ansible_collections.community.solidfire.tests.unit.compat.mock import patch
 from ansible.module_utils import basic
 from ansible.module_utils._text import to_bytes
-import ansible_collections.netapp.elementsw.plugins.module_utils.netapp as netapp_utils
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
 
 if not netapp_utils.has_sf_sdk():
     pytestmark = pytest.mark.skip('skipping as missing required SolidFire Python SDK')
 
-from ansible_collections.netapp.elementsw.plugins.modules.na_elementsw_account \
+from ansible_collections.community.solidfire.plugins.modules.na_elementsw_account \
     import ElementSWAccount as my_module  # module under test
 
 
@@ -95,7 +95,7 @@ class TestMyModule(unittest.TestCase):
             my_module()
         print('Info: %s' % exc.value.args[0]['msg'])
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_ensure_command_called(self, mock_create_sf_connection):
         ''' a more interesting test '''
         set_module_args({
@@ -115,7 +115,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_check_error_reporting_on_add_exception(self, mock_create_sf_connection):
         ''' a more interesting test '''
         set_module_args({

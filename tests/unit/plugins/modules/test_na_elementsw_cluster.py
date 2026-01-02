@@ -9,14 +9,14 @@ import pytest
 
 from ansible.module_utils import basic
 from ansible.module_utils._text import to_bytes
-from ansible_collections.netapp.elementsw.tests.unit.compat import unittest
-from ansible_collections.netapp.elementsw.tests.unit.compat.mock import patch
-import ansible_collections.netapp.elementsw.plugins.module_utils.netapp as netapp_utils
+from ansible_collections.community.solidfire.tests.unit.compat import unittest
+from ansible_collections.community.solidfire.tests.unit.compat.mock import patch
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
 
 if not netapp_utils.has_sf_sdk():
     pytestmark = pytest.mark.skip('skipping as missing required SolidFire Python SDK')
 
-from ansible_collections.netapp.elementsw.plugins.modules.na_elementsw_cluster \
+from ansible_collections.community.solidfire.plugins.modules.na_elementsw_cluster \
     import ElementSWCluster as my_module  # module under test
 
 
@@ -126,7 +126,7 @@ class TestMyModule(unittest.TestCase):
             my_module()
         print('Info: %s' % exc.value.args[0]['msg'])
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_create(self, mock_create_sf_connection):
         ''' create cluster basic '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -143,7 +143,7 @@ class TestMyModule(unittest.TestCase):
         assert 'create_cluster' in my_obj.sfe_node.called
         assert 'send_request' not in my_obj.sfe_node.called
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_create_extra_parms(self, mock_create_sf_connection):
         ''' force a direct call to send_request '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -160,7 +160,7 @@ class TestMyModule(unittest.TestCase):
         assert 'send_request' in my_obj.sfe_node.called
         assert 'create_cluster' not in my_obj.sfe_node.called
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_create_idempotent(self, mock_create_sf_connection):
         ''' cluster already exists with same nodes '''
         args = dict(self.ARGS)
@@ -175,7 +175,7 @@ class TestMyModule(unittest.TestCase):
         assert 'send_request' not in my_obj.sfe_node.called
         assert 'create_cluster' not in my_obj.sfe_node.called
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_create_idempotent_extra_nodes(self, mock_create_sf_connection):
         ''' cluster already exists with more nodes '''
         args = dict(self.ARGS)
@@ -191,7 +191,7 @@ class TestMyModule(unittest.TestCase):
         assert 'send_request' not in my_obj.sfe_node.called
         assert 'create_cluster' not in my_obj.sfe_node.called
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_create_idempotent_extra_nodes_ok(self, mock_create_sf_connection):
         ''' cluster already exists with more nodes but we're OK with a superset '''
         args = dict(self.ARGS)
@@ -209,7 +209,7 @@ class TestMyModule(unittest.TestCase):
         assert 'send_request' not in my_obj.sfe_node.called
         assert 'create_cluster' not in my_obj.sfe_node.called
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_create_idempotent_missing_nodes(self, mock_create_sf_connection):
         ''' cluster already exists with fewer nodes.
             Since not every node is lister in the ensemble, we can't tell if it's an error or not '''

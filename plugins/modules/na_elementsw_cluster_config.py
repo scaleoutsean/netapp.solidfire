@@ -9,11 +9,6 @@ Element Software Configure cluster
 
 
 from __future__ import absolute_import, division, print_function
-import traceback
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils._text import to_native
-import ansible_collections.netapp.elementsw.plugins.module_utils.netapp as netapp_utils
-from ansible_collections.netapp.elementsw.plugins.module_utils.netapp_module import NetAppModule
 
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
@@ -27,7 +22,7 @@ module: na_elementsw_cluster_config
 
 short_description: Configure Element SW Cluster
 extends_documentation_fragment:
-    - netapp.elementsw.netapp.solidfire
+    - community.solidfire.netapp.solidfire
 version_added: 2.8.0
 author: NetApp Ansible Team (@carchi8py) <ng-ansibleteam@netapp.com>
 description:
@@ -119,6 +114,11 @@ msg:
 
 __metaclass__ = type
 
+import traceback
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils._text import to_native
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
+from ansible_collections.community.solidfire.plugins.module_utils.netapp_module import NetAppModule
 
 HAS_SF_SDK = netapp_utils.has_sf_sdk()
 
@@ -217,6 +217,8 @@ class ElementSWClusterConfig(object):
         """
         enable/disable encryption at rest
         """
+        # ensure variable is always defined for error reporting
+        encryption_state = state
         try:
             if state == 'present':
                 encryption_state = 'enable'
@@ -224,6 +226,8 @@ class ElementSWClusterConfig(object):
             elif state == 'absent':
                 encryption_state = 'disable'
                 self.sfe.disable_encryption_at_rest()
+            else:
+                self.module.fail_json(msg='Invalid value for encryption_at_rest: %s' % to_native(state))
         except Exception as exception_object:
             self.module.fail_json(msg='Failed to %s rest encryption %s' % (encryption_state,
                                   to_native(exception_object)),

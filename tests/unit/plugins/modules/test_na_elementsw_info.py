@@ -9,14 +9,14 @@ import pytest
 
 from ansible.module_utils import basic
 from ansible.module_utils._text import to_bytes
-from ansible_collections.netapp.elementsw.tests.unit.compat import unittest
-from ansible_collections.netapp.elementsw.tests.unit.compat.mock import patch
-import ansible_collections.netapp.elementsw.plugins.module_utils.netapp as netapp_utils
+from ansible_collections.community.solidfire.tests.unit.compat import unittest
+from ansible_collections.community.solidfire.tests.unit.compat.mock import patch
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
 
 if not netapp_utils.has_sf_sdk():
     pytestmark = pytest.mark.skip('skipping as missing required SolidFire Python SDK')
 
-from ansible_collections.netapp.elementsw.plugins.modules.na_elementsw_info \
+from ansible_collections.community.solidfire.plugins.modules.na_elementsw_info \
     import ElementSWInfo as my_module  # module under test
 
 
@@ -146,7 +146,7 @@ class TestMyModule(unittest.TestCase):
             my_module()
         print('Info: %s' % exc.value.args[0]['msg'])
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_info_all_default(self, mock_create_sf_connection):
         ''' gather all by default '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -165,7 +165,7 @@ class TestMyModule(unittest.TestCase):
         assert 'list_accounts' in my_obj.sfe_node.called
         assert 'get_config' in my_obj.sfe_node.called
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_info_all_all(self, mock_create_sf_connection):
         ''' gather all explictly '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -181,7 +181,7 @@ class TestMyModule(unittest.TestCase):
         assert 'list_accounts' in my_obj.sfe_node.called
         assert 'get_config' in my_obj.sfe_node.called
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_info_all_clusters(self, mock_create_sf_connection):
         ''' gather all cluster scoped subsets '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -201,7 +201,7 @@ class TestMyModule(unittest.TestCase):
         assert 'list_accounts' in my_obj.sfe_node.called
         assert 'get_config' not in my_obj.sfe_node.called
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_info_all_nodes(self, mock_create_sf_connection):
         ''' gather all node scoped subsets '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -221,7 +221,7 @@ class TestMyModule(unittest.TestCase):
         assert 'list_accounts' not in my_obj.sfe_node.called
         assert 'get_config' in my_obj.sfe_node.called
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_info_all_nodes_not_alone(self, mock_create_sf_connection):
         ''' gather all node scoped subsets but fail as another subset is present '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -236,7 +236,7 @@ class TestMyModule(unittest.TestCase):
         msg = 'no other subset is allowed'
         assert msg in exc.value.args[0]['msg']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_info_filter_success(self, mock_create_sf_connection):
         ''' filter on key, value - succesful match '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -252,7 +252,7 @@ class TestMyModule(unittest.TestCase):
         username = exc.value.args[0]['info']['cluster_accounts']['accounts'][0]['username']
         assert username == 'user1'
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_info_filter_bad_key(self, mock_create_sf_connection):
         ''' filter on key, value - key not found  '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -268,7 +268,7 @@ class TestMyModule(unittest.TestCase):
         msg = 'Error: key bad_key not found in'
         assert msg in exc.value.args[0]['msg']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_info_filter_bad_key_ignored(self, mock_create_sf_connection):
         ''' filter on key, value - key not found - ignore error '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -284,7 +284,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert exc.value.args[0]['info']['cluster_accounts']['accounts'] == list()
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_info_filter_record_not_found(self, mock_create_sf_connection):
         ''' filter on key, value - no match '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -300,7 +300,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert exc.value.args[0]['info']['cluster_accounts']['accounts'] == list()
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_info_filter_record_not_found_error(self, mock_create_sf_connection):
         ''' filter on key, value - no match - force error on empty '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -317,7 +317,7 @@ class TestMyModule(unittest.TestCase):
         msg = 'Error: no match for'
         assert msg in exc.value.args[0]['msg']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_connection_error(self, mock_create_sf_connection):
         ''' filter on key, value - no match - force error on empty '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -330,7 +330,7 @@ class TestMyModule(unittest.TestCase):
         msg = 'Failed to create connection for hostname:442'
         assert msg in exc.value.args[0]['msg']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_other_connection_error(self, mock_create_sf_connection):
         ''' filter on key, value - no match - force error on empty '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args

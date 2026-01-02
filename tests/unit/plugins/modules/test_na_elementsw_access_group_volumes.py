@@ -6,16 +6,16 @@ __metaclass__ = type
 import json
 import pytest
 
-from ansible_collections.netapp.elementsw.tests.unit.compat import unittest
-from ansible_collections.netapp.elementsw.tests.unit.compat.mock import patch
+from ansible_collections.community.solidfire.tests.unit.compat import unittest
+from ansible_collections.community.solidfire.tests.unit.compat.mock import patch
 from ansible.module_utils import basic
 from ansible.module_utils._text import to_bytes
-import ansible_collections.netapp.elementsw.plugins.module_utils.netapp as netapp_utils
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
 
 if not netapp_utils.has_sf_sdk():
     pytestmark = pytest.mark.skip('skipping as missing required SolidFire Python SDK')
 
-from ansible_collections.netapp.elementsw.plugins.modules.na_elementsw_access_group_volumes \
+from ansible_collections.community.solidfire.plugins.modules.na_elementsw_access_group_volumes \
     import ElementSWAccessGroupVolumes as my_module  # module under test
 
 
@@ -132,7 +132,7 @@ class TestMyModule(unittest.TestCase):
             my_module()
         print('Info: %s' % exc.value.args[0]['msg'])
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_add_volume(self, mock_create_sf_connection):
         ''' adding a volume '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -145,7 +145,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_add_volume_idempotent(self, mock_create_sf_connection):
         ''' adding a volume that is already in the access group '''
         args = dict(self.ARGS)
@@ -158,7 +158,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert not exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_remove_volume(self, mock_create_sf_connection):
         ''' removing a volume that is in the access group '''
         args = dict(self.ARGS)
@@ -172,7 +172,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_remove_volume_idempotent(self, mock_create_sf_connection):
         ''' removing a volume that is not in the access group '''
         args = dict(self.ARGS)
@@ -186,7 +186,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert not exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_check_error_reporting_on_modify_exception(self, mock_create_sf_connection):
         ''' modify does not return anything but can raise an exception '''
         args = dict(self.ARGS)
@@ -200,7 +200,7 @@ class TestMyModule(unittest.TestCase):
         message = 'Error updating volume access group element_groupname: %s' % MODIFY_ERROR
         assert exc.value.args[0]['msg'] == message
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_check_error_reporting_on_invalid_volume_name(self, mock_create_sf_connection):
         ''' report error if volume does not exist '''
         args = dict(self.ARGS)
@@ -215,7 +215,7 @@ class TestMyModule(unittest.TestCase):
         message = 'Error: Specified volume %s does not exist' % 'volume1'
         assert exc.value.args[0]['msg'] == message
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_check_error_reporting_on_invalid_account_group_name(self, mock_create_sf_connection):
         ''' report error if access group does not exist '''
         args = dict(self.ARGS)
@@ -230,7 +230,7 @@ class TestMyModule(unittest.TestCase):
         message = 'Error: Specified access group "%s" does not exist for account id: %s.' % ('something_else', 'element_account_id')
         assert exc.value.args[0]['msg'] == message
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_check_error_reporting_on_invalid_account_id(self, mock_create_sf_connection):
         ''' report error if account id is not found '''
         args = dict(self.ARGS)

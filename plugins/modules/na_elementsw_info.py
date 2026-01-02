@@ -8,9 +8,6 @@ Element Software Info
 
 
 from __future__ import absolute_import, division, print_function
-from ansible.module_utils.basic import AnsibleModule
-import ansible_collections.netapp.elementsw.plugins.module_utils.netapp as netapp_utils
-from ansible_collections.netapp.elementsw.plugins.module_utils.netapp_module import NetAppModule
 
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
@@ -23,7 +20,7 @@ DOCUMENTATION = '''
 module: na_elementsw_info
 short_description: NetApp Element Software Info
 extends_documentation_fragment:
-  - netapp.elementsw.netapp.solidfire
+  - community.solidfire.netapp.solidfire
 version_added: 20.10.0
 author: NetApp Ansible Team (@carchi8py) <ng-ansibleteam@netapp.com>
 description:
@@ -113,6 +110,9 @@ debug:
 
 __metaclass__ = type
 
+from ansible.module_utils.basic import AnsibleModule
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
+from ansible_collections.community.solidfire.plugins.module_utils.netapp_module import NetAppModule
 
 HAS_SF_SDK = netapp_utils.has_sf_sdk()
 

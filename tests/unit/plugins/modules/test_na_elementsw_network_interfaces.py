@@ -9,14 +9,14 @@ import pytest
 
 from ansible.module_utils import basic
 from ansible.module_utils._text import to_bytes
-from ansible_collections.netapp.elementsw.tests.unit.compat import unittest
-from ansible_collections.netapp.elementsw.tests.unit.compat.mock import patch
-import ansible_collections.netapp.elementsw.plugins.module_utils.netapp as netapp_utils
+from ansible_collections.community.solidfire.tests.unit.compat import unittest
+from ansible_collections.community.solidfire.tests.unit.compat.mock import patch
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
 
 if not netapp_utils.has_sf_sdk():
     pytestmark = pytest.mark.skip('skipping as missing required SolidFire Python SDK')
 
-from ansible_collections.netapp.elementsw.plugins.modules.na_elementsw_network_interfaces \
+from ansible_collections.community.solidfire.plugins.modules.na_elementsw_network_interfaces \
     import ElementSWNetworkInterfaces as my_module  # module under test
 
 
@@ -217,7 +217,7 @@ class TestMyModule(unittest.TestCase):
         msg = 'This module cannot set or change "method"'
         assert msg in exc.value.args[0]['msg']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_modify_nothing(self, mock_create_sf_connection):
         ''' modify without 1g or 10g options '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -235,7 +235,7 @@ class TestMyModule(unittest.TestCase):
         assert not exc.value.args[0]['changed']
         assert len(my_obj.sfe.set_network_config_args) == 0
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_modify_all(self, mock_create_sf_connection):
         ''' modify with all options '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -249,7 +249,7 @@ class TestMyModule(unittest.TestCase):
         assert exc.value.args[0]['changed']
         assert 'Bond1G' in my_obj.sfe.set_network_config_args
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_modify_1g_only(self, mock_create_sf_connection):
         ''' modify with 1g options only '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -271,7 +271,7 @@ class TestMyModule(unittest.TestCase):
             if key != 'bond_lacp_rate':
                 assert my_obj.sfe.set_network_config_args['Bond1G'][mapkey(key)] == args['bond_1g'][key]
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_modify_10g_only(self, mock_create_sf_connection):
         ''' modify with 10g options only '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args

@@ -8,14 +8,14 @@ import pytest
 
 from ansible.module_utils import basic
 from ansible.module_utils._text import to_bytes
-from ansible_collections.netapp.elementsw.tests.unit.compat import unittest
-from ansible_collections.netapp.elementsw.tests.unit.compat.mock import patch
-import ansible_collections.netapp.elementsw.plugins.module_utils.netapp as netapp_utils
+from ansible_collections.community.solidfire.tests.unit.compat import unittest
+from ansible_collections.community.solidfire.tests.unit.compat.mock import patch
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
 
 if not netapp_utils.has_sf_sdk():
     pytestmark = pytest.mark.skip('skipping as missing required SolidFire Python SDK')
 
-from ansible_collections.netapp.elementsw.plugins.modules.na_elementsw_node \
+from ansible_collections.community.solidfire.plugins.modules.na_elementsw_node \
     import ElementSWNode as my_module  # module under test
 
 
@@ -141,7 +141,7 @@ class TestMyModule(unittest.TestCase):
             my_module()
         print('Info: %s' % exc.value.args[0]['msg'])
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_add_node_fail_not_pending(self, mock_create_sf_connection):
         ''' adding a node - fails as these nodes are unknown '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -155,7 +155,7 @@ class TestMyModule(unittest.TestCase):
         msg = 'nodes not in pending or active lists'
         assert msg in exc.value.args[0]['msg']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_add_node(self, mock_create_sf_connection):
         ''' adding a node '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
@@ -168,7 +168,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_add_node_idempotent(self, mock_create_sf_connection):
         ''' adding a node that is already in the cluster '''
         args = dict(self.ARGS)
@@ -181,7 +181,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert not exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_remove_node(self, mock_create_sf_connection):
         ''' removing a node that is in the cluster '''
         args = dict(self.ARGS)
@@ -195,7 +195,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_remove_node_idempotent(self, mock_create_sf_connection):
         ''' removing a node that is not in the cluster '''
         args = dict(self.ARGS)
@@ -209,7 +209,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert not exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_remove_node_with_active_drive(self, mock_create_sf_connection):
         ''' removing a node that is in the cluster but still associated with a drive '''
         args = dict(self.ARGS)
@@ -224,7 +224,7 @@ class TestMyModule(unittest.TestCase):
         msg = 'Error deleting node %s: node has active drives' % NODE_NAME1
         assert msg in exc.value.args[0]['msg']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_set_cluster_name_only(self, mock_create_sf_connection):
         ''' set cluster name without adding the node '''
         args = dict(self.ARGS)
@@ -241,7 +241,7 @@ class TestMyModule(unittest.TestCase):
         message = 'List of updated nodes with cluster_name:'
         assert message in exc.value.args[0]['msg']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_set_cluster_name_only_idempotent(self, mock_create_sf_connection):
         ''' set cluster name without adding the node - name already set '''
         args = dict(self.ARGS)
@@ -258,7 +258,7 @@ class TestMyModule(unittest.TestCase):
         message = ''
         assert message == exc.value.args[0]['msg']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_set_cluster_name_and_add(self, mock_create_sf_connection):
         ''' set cluster name and add the node '''
         args = dict(self.ARGS)
@@ -276,7 +276,7 @@ class TestMyModule(unittest.TestCase):
         message = 'List of added nodes: '
         assert message in exc.value.args[0]['msg']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_set_cluster_name_and_add_idempotent(self, mock_create_sf_connection):
         ''' set cluster name and add the node '''
         args = dict(self.ARGS)
@@ -292,7 +292,7 @@ class TestMyModule(unittest.TestCase):
         message = ''
         assert message == exc.value.args[0]['msg']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_set_cluster_name_already_active_no_change(self, mock_create_sf_connection):
         ''' set cluster name fails because node state is 'Active' '''
         args = dict(self.ARGS)
@@ -308,7 +308,7 @@ class TestMyModule(unittest.TestCase):
         message = ''
         assert message == exc.value.args[0]['msg']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_set_cluster_name_already_active_change_not_allowed(self, mock_create_sf_connection):
         ''' set cluster name fails because node state is 'Active' '''
         args = dict(self.ARGS)

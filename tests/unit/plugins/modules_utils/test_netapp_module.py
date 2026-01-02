@@ -5,8 +5,8 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
-from ansible_collections.netapp.elementsw.tests.unit.compat import unittest
-from ansible_collections.netapp.elementsw.plugins.module_utils.netapp_module import NetAppModule as na_helper
+from ansible_collections.community.solidfire.tests.unit.compat import unittest
+from ansible_collections.community.solidfire.plugins.module_utils.netapp_module import NetAppModule as na_helper
 
 
 class TestMyModule(unittest.TestCase):

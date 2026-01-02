@@ -5,16 +5,16 @@ __metaclass__ = type
 import json
 import pytest
 
-from ansible_collections.netapp.elementsw.tests.unit.compat import unittest
-from ansible_collections.netapp.elementsw.tests.unit.compat.mock import patch
+from ansible_collections.community.solidfire.tests.unit.compat import unittest
+from ansible_collections.community.solidfire.tests.unit.compat.mock import patch
 from ansible.module_utils import basic
 from ansible.module_utils._text import to_bytes
-import ansible_collections.netapp.elementsw.plugins.module_utils.netapp as netapp_utils
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
 
 if not netapp_utils.has_sf_sdk():
     pytestmark = pytest.mark.skip('skipping as missing required SolidFire Python SDK')
 
-from ansible_collections.netapp.elementsw.plugins.modules.na_elementsw_cluster_snmp \
+from ansible_collections.community.solidfire.plugins.modules.na_elementsw_cluster_snmp \
     import ElementSWClusterSnmp as my_module  # module under test
 
 
@@ -82,7 +82,7 @@ class TestMyModule(unittest.TestCase):
             'password': 'netapp1!',
         })
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_module_fail_when_required_args_missing(self, mock_create_sf_connection):
         ''' required arguments are reported as errors '''
         with pytest.raises(AnsibleFailJson) as exc:
@@ -90,7 +90,7 @@ class TestMyModule(unittest.TestCase):
             my_module()
         print('Info: %s' % exc.value)
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_ensure_enable_snmp_called(self, mock_create_sf_connection):
         ''' test if enable_snmp is called '''
         module_args = {}
@@ -114,7 +114,7 @@ class TestMyModule(unittest.TestCase):
         print('Info: test_if_enable_snmp_called: %s' % repr(exc.value))
         assert exc.value
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_ensure_configure_snmp_from_version_3_TO_version_2_called(self, mock_create_sf_connection):
         ''' test if configure snmp from version_3 to version_2'''
         module_args = {}
@@ -138,7 +138,7 @@ class TestMyModule(unittest.TestCase):
         print('Info: test_ensure_configure_snmp_from_version_3_TO_version_2_called: %s' % repr(exc.value))
         assert exc.value
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_ensure_configure_snmp_from_version_2_TO_version_3_called(self, mock_create_sf_connection):
         ''' test if configure snmp from version_2 to version_3'''
         module_args = {}
@@ -162,7 +162,7 @@ class TestMyModule(unittest.TestCase):
         print('Info: test_ensure_configure_snmp_from_version_2_TO_version_3_called: %s' % repr(exc.value))
         assert exc.value
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_ensure_disable_snmp_called(self, mock_create_sf_connection):
         ''' test if disable_snmp is called '''
         module_args = {}

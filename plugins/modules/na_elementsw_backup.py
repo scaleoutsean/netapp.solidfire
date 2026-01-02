@@ -6,14 +6,7 @@
 Element Software Backup Manager
 """
 
-
 from __future__ import absolute_import, division, print_function
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils._text import to_native
-import ansible_collections.netapp.elementsw.plugins.module_utils.netapp as netapp_utils
-from ansible_collections.netapp.elementsw.plugins.module_utils.netapp_elementsw_module import NaElementSWModule
-import time
-
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
                     'status': ['preview'],
@@ -25,7 +18,7 @@ module: na_elementsw_backup
 
 short_description: NetApp Element Software Create Backups
 extends_documentation_fragment:
-    - netapp.elementsw.netapp.solidfire
+    - community.solidfire.netapp.solidfire
 version_added: 2.7.0
 author: NetApp Ansible Team (@carchi8py) <ng-ansibleteam@netapp.com>
 description:
@@ -110,6 +103,11 @@ RETURN = """
 
 __metaclass__ = type
 
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils._text import to_native
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
+from ansible_collections.community.solidfire.plugins.module_utils.netapp_elementsw_module import NaElementSWModule
+import time
 
 HAS_SF_SDK = netapp_utils.has_sf_sdk()
 try:
@@ -139,7 +137,6 @@ class ElementSWBackup(object):
                         'native', 'uncompressed'], default='native'),
             script=dict(required=False, type='str'),
             script_parameters=dict(required=False, type='dict')
-
 
         ))
 

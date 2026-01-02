@@ -3,18 +3,11 @@
 # (c) 2017, NetApp, Inc
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-
 from __future__ import absolute_import, division, print_function
-import traceback
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils._text import to_native
-import ansible_collections.netapp.elementsw.plugins.module_utils.netapp as netapp_utils
-
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
                     'status': ['preview'],
                     'supported_by': 'certified'}
-
 
 DOCUMENTATION = '''
 
@@ -22,7 +15,7 @@ module: na_elementsw_ldap
 
 short_description: NetApp Element Software Manage ldap admin users
 extends_documentation_fragment:
-    - netapp.elementsw.netapp.solidfire
+    - community.solidfire.netapp.solidfire
 version_added: 2.7.0
 author: NetApp Ansible Team (@carchi8py) <ng-ansibleteam@netapp.com>
 description:
@@ -109,7 +102,6 @@ EXAMPLES = """
         groupSearchType: MemberDN
         userDNTemplate:  uid=%USERNAME%,cn=users,cn=accounts,dc=corp,dc="{{ company name }}",dc=com
 
-
 """
 
 RETURN = """
@@ -119,6 +111,10 @@ RETURN = """
 
 __metaclass__ = type
 
+import traceback
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils._text import to_native
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
 
 HAS_SF_SDK = netapp_utils.has_sf_sdk()
 try:

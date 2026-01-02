@@ -5,16 +5,16 @@ __metaclass__ = type
 import json
 import pytest
 
-from ansible_collections.netapp.elementsw.tests.unit.compat import unittest
-from ansible_collections.netapp.elementsw.tests.unit.compat.mock import patch
+from ansible_collections.community.solidfire.tests.unit.compat import unittest
+from ansible_collections.community.solidfire.tests.unit.compat.mock import patch
 from ansible.module_utils import basic
 from ansible.module_utils._text import to_bytes
-import ansible_collections.netapp.elementsw.plugins.module_utils.netapp as netapp_utils
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
 
 if not netapp_utils.has_sf_sdk():
     pytestmark = pytest.mark.skip('skipping as missing required SolidFire Python SDK')
 
-from ansible_collections.netapp.elementsw.plugins.modules.na_elementsw_initiators \
+from ansible_collections.community.solidfire.plugins.modules.na_elementsw_initiators \
     import ElementSWInitiators as my_module  # module under test
 
 
@@ -105,7 +105,7 @@ class TestMyModule(unittest.TestCase):
             'password': 'SFlab1234',
         })
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_module_fail_when_required_args_missing(self, mock_create_sf_connection):
         ''' required arguments are reported as errors '''
         with pytest.raises(AnsibleFailJson) as exc:
@@ -113,7 +113,7 @@ class TestMyModule(unittest.TestCase):
             my_module()
         print('Info: %s' % exc.value.args[0]['msg'])
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_create_initiator(self, mock_create_sf_connection):
         ''' test if create initiator is called '''
         module_args = {}
@@ -135,7 +135,7 @@ class TestMyModule(unittest.TestCase):
         print('Info: test_create_initiators: %s' % repr(exc.value))
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_delete_initiator(self, mock_create_sf_connection):
         ''' test if delete initiator is called '''
         module_args = {}
@@ -155,7 +155,7 @@ class TestMyModule(unittest.TestCase):
         print('Info: test_delete_initiators: %s' % repr(exc.value))
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_modify_initiator(self, mock_create_sf_connection):
         ''' test if modify initiator is called '''
         module_args = {}
@@ -177,7 +177,7 @@ class TestMyModule(unittest.TestCase):
         print('Info: test_modify_initiators: %s' % repr(exc.value))
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_modify_initiator_idempotent(self, mock_create_sf_connection):
         ''' test if modify initiator is called '''
         module_args = {}

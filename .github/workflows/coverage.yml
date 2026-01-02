@@ -20,8 +20,18 @@ jobs:
         with:
           python-version: 3.12
 
-      - name: Install Ansible stable-2.20
-        run: pip install https://github.com/ansible/ansible/archive/stable-2.20.tar.gz --disable-pip-version-check
+      - name: Install Ansible stable-2.20.1
+        # run: pip install https://github.com/ansible/ansible/archive/stable-2.20.1.tar.gz --disable-pip-version-check
+        run: pip install ansible==2.20.1 --disable-pip-version-check
+
+      - name: Cleanup workspace
+        run: |
+          rm -rf .venv tests/output || true
+
+      - name: Debug workspace listing
+        run: |
+          pwd
+          ls -la
 
       - name: Make directory to make ansible-test happy
         run: |
@@ -33,7 +43,7 @@ jobs:
         # https://docs.ansible.com/projects/ansible-core/2.20/porting_guides/porting_guide_core_2.20.html
         # Minimum version: python 3.12+
         run: ansible-test units --coverage --color --docker --python 3.12
-        working-directory: ansible_collections/netapp/elementsw/
+        working-directory: ansible_collections/community/solidfire/
 
         # ansible-test support producing code coverage date
       - name: Generate coverage report

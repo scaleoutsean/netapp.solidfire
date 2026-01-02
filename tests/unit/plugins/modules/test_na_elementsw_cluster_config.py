@@ -5,16 +5,16 @@ __metaclass__ = type
 import json
 import pytest
 
-from ansible_collections.netapp.elementsw.tests.unit.compat import unittest
-from ansible_collections.netapp.elementsw.tests.unit.compat.mock import patch
+from ansible_collections.community.solidfire.tests.unit.compat import unittest
+from ansible_collections.community.solidfire.tests.unit.compat.mock import patch
 from ansible.module_utils import basic
 from ansible.module_utils._text import to_bytes
-import ansible_collections.netapp.elementsw.plugins.module_utils.netapp as netapp_utils
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
 
 if not netapp_utils.has_sf_sdk():
     pytestmark = pytest.mark.skip('skipping as missing required SolidFire Python SDK')
 
-from ansible_collections.netapp.elementsw.plugins.modules.na_elementsw_cluster_config \
+from ansible_collections.community.solidfire.plugins.modules.na_elementsw_cluster_config \
     import ElementSWClusterConfig as my_module  # module under test
 
 
@@ -83,7 +83,7 @@ class TestMyModule(unittest.TestCase):
             'password': 'SFlab1234',
         })
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_module_fail_when_required_args_missing(self, mock_create_sf_connection):
         ''' required arguments are reported as errors '''
         with pytest.raises(AnsibleFailJson) as exc:
@@ -91,7 +91,7 @@ class TestMyModule(unittest.TestCase):
             my_module()
         print('Info: %s' % exc.value.args[0]['msg'])
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_ensure_setup_ntp_info_called(self, mock_create_sf_connection):
         ''' test if setup_ntp_info is called '''
         module_args = {}
@@ -106,7 +106,7 @@ class TestMyModule(unittest.TestCase):
         print('Info: test_setup_ntp_info: %s' % repr(exc.value))
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_ensure_set_encryption_at_rest_called(self, mock_create_sf_connection):
         ''' test if set_encryption_at_rest is called '''
         module_args = {}
@@ -126,7 +126,7 @@ class TestMyModule(unittest.TestCase):
         print('Info: test_set_encryption_at_rest disable: %s' % repr(exc.value))
         assert not exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_ensure_enable_feature_called(self, mock_create_sf_connection):
         ''' test if enable_feature for vvols is called '''
         module_args = {}
@@ -139,7 +139,7 @@ class TestMyModule(unittest.TestCase):
         print('Info: test_enable_feature: %s' % repr(exc.value))
         assert not exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_ensure_set_cluster_full_threshold_called(self, mock_create_sf_connection):
         ''' test if set_cluster_full threshold is called '''
         module_args = {}

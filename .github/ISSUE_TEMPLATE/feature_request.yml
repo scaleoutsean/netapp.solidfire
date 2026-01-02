@@ -6,11 +6,11 @@ body:
 - type: markdown
   attributes:
     value: >
-      **Thank you for wanting to suggest a feature for netapp.elementsw!**
+      **Thank you for wanting to suggest a feature for community.solidfire!**
 
       💡
       Before you go ahead with your request, please first consider if it
-      would be useful for majority of the netapp.elementsw users. As a
+      would be useful for majority of the community.solidfire users. As a
       general rule of thumb, any feature that is only of interest to a
       small sub group should be [implemented in a third-party Ansible
       Collection][contribute to collections] or maybe even just your

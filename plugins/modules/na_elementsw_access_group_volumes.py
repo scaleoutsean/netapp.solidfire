@@ -9,19 +9,13 @@ Element Software Access Group Volumes
 """
 
 from __future__ import absolute_import, division, print_function
-import traceback
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils._text import to_native
-import ansible_collections.netapp.elementsw.plugins.module_utils.netapp as netapp_utils
-from ansible_collections.netapp.elementsw.plugins.module_utils.netapp_elementsw_module import NaElementSWModule
-
 
 DOCUMENTATION = """
 module: na_elementsw_access_group_volumes
 
 short_description: NetApp Element Software Add/Remove Volumes to/from Access Group
 extends_documentation_fragment:
-    - netapp.elementsw.netapp.solidfire
+    - community.solidfire.netapp.solidfire
 version_added: 20.1.0
 author: NetApp Ansible Team (@carchi8py) <ng-ansibleteam@netapp.com>
 description:
@@ -82,7 +76,6 @@ EXAMPLES = """
        account_id: '1'
 """
 
-
 RETURN = """
 
 msg:
@@ -95,6 +88,11 @@ msg:
 
 __metaclass__ = type
 
+import traceback
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils._text import to_native
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
+from ansible_collections.community.solidfire.plugins.module_utils.netapp_elementsw_module import NaElementSWModule
 
 HAS_SF_SDK = netapp_utils.has_sf_sdk()
 try:

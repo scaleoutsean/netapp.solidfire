@@ -8,14 +8,14 @@ import pytest
 
 from ansible.module_utils import basic
 from ansible.module_utils._text import to_bytes
-from ansible_collections.netapp.elementsw.tests.unit.compat import unittest
-from ansible_collections.netapp.elementsw.tests.unit.compat.mock import patch
-import ansible_collections.netapp.elementsw.plugins.module_utils.netapp as netapp_utils
+from ansible_collections.community.solidfire.tests.unit.compat import unittest
+from ansible_collections.community.solidfire.tests.unit.compat.mock import patch
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
 
 if not netapp_utils.has_sf_sdk():
     pytestmark = pytest.mark.skip('skipping as missing required SolidFire Python SDK')
 
-from ansible_collections.netapp.elementsw.plugins.modules.na_elementsw_qos_policy \
+from ansible_collections.community.solidfire.plugins.modules.na_elementsw_qos_policy \
     import ElementSWQosPolicy as my_module  # module under test
 
 
@@ -123,7 +123,7 @@ class TestMyModule(unittest.TestCase):
             my_module()
         print('Info: %s' % exc.value.args[0]['msg'])
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_add_qos_policy(self, mock_create_sf_connection):
         ''' adding a qos_policy '''
         args = dict(self.ARGS)      # deep copy as other tests can modify args
@@ -137,7 +137,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_add_qos_policy_idempotent(self, mock_create_sf_connection):
         ''' adding a qos_policy '''
         args = dict(self.ARGS)
@@ -150,7 +150,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert not exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_delete_qos_policy(self, mock_create_sf_connection):
         ''' removing a qos policy '''
         args = dict(self.ARGS)
@@ -164,7 +164,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_delete_qos_policy_idempotent(self, mock_create_sf_connection):
         ''' removing a qos policy '''
         args = dict(self.ARGS)
@@ -179,7 +179,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert not exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_modify_qos_policy(self, mock_create_sf_connection):
         ''' modifying a qos policy  '''
         args = dict(self.ARGS)
@@ -193,7 +193,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_rename_qos_policy(self, mock_create_sf_connection):
         ''' renaming a qos policy  '''
         args = dict(self.ARGS)
@@ -208,7 +208,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_rename_modify_qos_policy_idempotent(self, mock_create_sf_connection):
         ''' renaming a qos policy  '''
         args = dict(self.ARGS)
@@ -222,7 +222,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert not exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_create_qos_policy_exception(self, mock_create_sf_connection):
         ''' creating a qos policy can raise an exception '''
         args = dict(self.ARGS)
@@ -237,7 +237,7 @@ class TestMyModule(unittest.TestCase):
         message = 'Error creating qos policy: %s' % POLICY_NAME
         assert exc.value.args[0]['msg'].startswith(message)
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_modify_qos_policy_exception(self, mock_create_sf_connection):
         ''' modifying a qos policy can raise an exception '''
         args = dict(self.ARGS)
@@ -252,7 +252,7 @@ class TestMyModule(unittest.TestCase):
         message = 'Error updating qos policy: %s' % POLICY_NAME
         assert exc.value.args[0]['msg'].startswith(message)
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_delete_qos_policy_exception(self, mock_create_sf_connection):
         ''' deleting a qos policy can raise an exception '''
         args = dict(self.ARGS)
@@ -267,7 +267,7 @@ class TestMyModule(unittest.TestCase):
         message = 'Error deleting qos policy: %s' % POLICY_NAME
         assert exc.value.args[0]['msg'].startswith(message)
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_check_error_reporting_on_missing_qos_option(self, mock_create_sf_connection):
         ''' report error if qos option is not given on create '''
         args = dict(self.ARGS)
@@ -283,7 +283,7 @@ class TestMyModule(unittest.TestCase):
         message = "Error creating qos policy: %s, 'qos:' option is required" % args['name']
         assert exc.value.args[0]['msg'] == message
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_check_error_reporting_on_missing_from_name_policy(self, mock_create_sf_connection):
         ''' report error if qos policy to rename does not exist '''
         args = dict(self.ARGS)

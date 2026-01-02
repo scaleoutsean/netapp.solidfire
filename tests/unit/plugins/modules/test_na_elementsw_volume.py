@@ -8,14 +8,14 @@ import pytest
 
 from ansible.module_utils import basic
 from ansible.module_utils._text import to_bytes
-from ansible_collections.netapp.elementsw.tests.unit.compat import unittest
-from ansible_collections.netapp.elementsw.tests.unit.compat.mock import patch
-import ansible_collections.netapp.elementsw.plugins.module_utils.netapp as netapp_utils
+from ansible_collections.community.solidfire.tests.unit.compat import unittest
+from ansible_collections.community.solidfire.tests.unit.compat.mock import patch
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
 
 if not netapp_utils.has_sf_sdk():
     pytestmark = pytest.mark.skip('skipping as missing required SolidFire Python SDK')
 
-from ansible_collections.netapp.elementsw.plugins.modules.na_elementsw_volume \
+from ansible_collections.community.solidfire.plugins.modules.na_elementsw_volume \
     import ElementSWVolume as my_module  # module under test
 
 
@@ -165,7 +165,7 @@ class TestMyModule(unittest.TestCase):
             my_module()
         print('Info: %s' % exc.value.args[0]['msg'])
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_add_volume(self, mock_create_sf_connection):
         ''' adding a volume '''
         args = dict(self.ARGS)      # deep copy as other tests can modify args
@@ -180,7 +180,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_add_or_modify_volume_idempotent_qos_policy(self, mock_create_sf_connection):
         ''' adding a volume '''
         args = dict(self.ARGS)
@@ -194,7 +194,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert not exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_add_or_modify_volume_idempotent_qos(self, mock_create_sf_connection):
         ''' adding a volume '''
         args = dict(self.ARGS)
@@ -208,7 +208,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert not exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_delete_volume(self, mock_create_sf_connection):
         ''' removing a volume '''
         args = dict(self.ARGS)
@@ -223,7 +223,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_delete_volume_idempotent(self, mock_create_sf_connection):
         ''' removing a volume '''
         args = dict(self.ARGS)
@@ -239,7 +239,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert not exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_modify_volume_qos(self, mock_create_sf_connection):
         ''' modifying a volume  '''
         args = dict(self.ARGS)
@@ -254,7 +254,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_modify_volume_qos_policy_to_qos(self, mock_create_sf_connection):
         ''' modifying a volume  '''
         args = dict(self.ARGS)
@@ -269,7 +269,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_modify_volume_qos_policy(self, mock_create_sf_connection):
         ''' modifying a volume  '''
         args = dict(self.ARGS)
@@ -284,7 +284,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_modify_volume_qos_to_qos_policy(self, mock_create_sf_connection):
         ''' modifying a volume  '''
         args = dict(self.ARGS)
@@ -298,7 +298,7 @@ class TestMyModule(unittest.TestCase):
         print(exc.value.args[0])
         assert exc.value.args[0]['changed']
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_create_volume_exception(self, mock_create_sf_connection):
         ''' creating a volume can raise an exception '''
         args = dict(self.ARGS)
@@ -314,7 +314,7 @@ class TestMyModule(unittest.TestCase):
         message = 'Error provisioning volume: %s' % args['name']
         assert exc.value.args[0]['msg'].startswith(message)
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_modify_volume_exception(self, mock_create_sf_connection):
         ''' modifying a volume can raise an exception '''
         args = dict(self.ARGS)
@@ -330,7 +330,7 @@ class TestMyModule(unittest.TestCase):
         message = 'Error updating volume: %s' % VOLUME_ID
         assert exc.value.args[0]['msg'].startswith(message)
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_delete_volume_exception(self, mock_create_sf_connection):
         ''' deleting a volume can raise an exception '''
         args = dict(self.ARGS)
@@ -346,7 +346,7 @@ class TestMyModule(unittest.TestCase):
         message = 'Error deleting volume: %s' % VOLUME_ID
         assert exc.value.args[0]['msg'].startswith(message)
 
-    @patch('ansible_collections.netapp.elementsw.plugins.module_utils.netapp.create_sf_connection')
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_check_error_reporting_on_non_existent_qos_policy(self, mock_create_sf_connection):
         ''' report error if qos option is not given on create '''
         args = dict(self.ARGS)
