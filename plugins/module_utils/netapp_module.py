@@ -42,13 +42,13 @@ def cmp(a, b):
     # convert to lower case for string comparison.
     if a is None:
         return -1
-    if type(a) is str and type(b) is str:
+    if isinstance(a, str) and isinstance(b, str):
         a = a.lower()
         b = b.lower()
     # if list has string element, convert string to lower case.
-    if type(a) is list and type(b) is list:
-        a = [x.lower() if type(x) is str else x for x in a]
-        b = [x.lower() if type(x) is str else x for x in b]
+    if isinstance(a, list) and isinstance(b, list):
+        a = [x.lower() if isinstance(x, str) else x for x in a]
+        b = [x.lower() if isinstance(x, str) else x for x in b]
         a.sort()
         b.sort()
     return (a > b) - (a < b)
@@ -177,11 +177,11 @@ class NetAppModule(object):
         # collect changed attributes
         for key, value in current.items():
             if key in desired and desired[key] is not None:
-                if type(value) is list:
+                if isinstance(value, list):
                     modified_list = self.compare_lists(value, desired[key], get_list_diff)  # get modified list from current and desired
                     if modified_list:
                         modified[key] = modified_list
-                elif type(value) is dict:
+                elif isinstance(value, dict):
                     modified_dict = self.get_modified_attributes(value, desired[key], get_list_diff, additional_keys=True)
                     if modified_dict:
                         modified[key] = modified_dict

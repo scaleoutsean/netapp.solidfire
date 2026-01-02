@@ -26,7 +26,9 @@ __metaclass__ = type
 # One unittest needs to import builtins via __import__() so we need to have
 # the string that represents it
 try:
-    import __builtin__
+    # Try importing the python2 builtins module name without binding it to avoid
+    # an unused-import pylint warning on Python3 environments.
+    __import__('__builtin__')
 except ImportError:
     BUILTINS = 'builtins'
 else:

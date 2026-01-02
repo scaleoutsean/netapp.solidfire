@@ -6,7 +6,7 @@ import json
 import pytest
 
 from ansible_collections.community.solidfire.tests.unit.compat import unittest
-from ansible_collections.community.solidfire.tests.unit.compat.mock import patch, Mock
+from ansible_collections.community.solidfire.tests.unit.compat.mock import patch
 from ansible.module_utils import basic
 from ansible.module_utils._text import to_bytes
 import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
