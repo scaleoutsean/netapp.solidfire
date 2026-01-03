@@ -27,6 +27,7 @@ sections:
   - Bugfixes
 - - known_issues
   - Known Issues
-title: NetApp ElementSW Collection
+collection: community.solidfire
+title: community.solidfire
 trivial_section_name: trivial
 use_fqcn: true
