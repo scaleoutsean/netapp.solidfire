@@ -114,7 +114,7 @@ EXAMPLES = """
        qos: {minIOPS: 1000, maxIOPS: 20000, burstIOPS: 50000}
        account_id: 3
        enable512e: False
-       size: 1
+       size: 1.1
        size_unit: gb
 
    - name: Update Volume
