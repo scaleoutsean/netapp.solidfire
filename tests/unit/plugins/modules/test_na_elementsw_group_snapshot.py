@@ -15,8 +15,7 @@ import ansible_collections.community.solidfire.plugins.module_utils.netapp as ne
 if not netapp_utils.has_sf_sdk():
     pytestmark = pytest.mark.skip('skipping as missing required SolidFire Python SDK')
 
-from ansible_collections.community.solidfire.plugins.modules.na_elementsw_group_snapshot \
-    import ElementSWGroupSnapshot as my_module  # module under test
+from ansible_collections.community.solidfire.plugins.modules.na_elementsw_group_snapshot     import ElementSWGroupSnapshot as my_module  # module under test
 
 
 def set_module_args(args):
@@ -55,18 +54,15 @@ class MockSFConnection(object):
     def create_group_snapshot(self, volumes=None, name=None, enable_remote_replication=None, retention=None, attributes=None):
         members = []
         for v in volumes:
-            members.append(self.Bunch(snapshotID=1000+v, volumeID=v))
+            members.append(self.Bunch(snapshotID=1000 + v, volumeID=v))
         group = self.Bunch(groupSnapshotID=999, name=name, members=members)
         return self.Bunch(groupSnapshot=group)
 
-<<<<<<< HEAD
-=======
     def list_volumes_for_account(self, account_id=None):
         # return a single volume named 'volA' with id 555 for resolution tests
         v = self.Bunch(name='volA', volume_id=555, delete_time='')
         return self.Bunch(volumes=[v])
 
->>>>>>> 04c21ff (Accept volume by name for group snapshot)
 
 class TestMyModule(unittest.TestCase):
 
@@ -81,7 +77,7 @@ class TestMyModule(unittest.TestCase):
     def test_create_group_snapshot(self, mock_create_sf_connection):
         args = dict(
             hostname='host', username='user', password='pw',
-            volumes=[183,184,185], retention='0:5:5', attributes={'group_snap': True}
+            volumes=[183, 184, 185], retention='0:5:5', attributes={'group_snap': True}
         )
         set_module_args(args)
         mock_create_sf_connection.return_value = MockSFConnection()
@@ -89,14 +85,12 @@ class TestMyModule(unittest.TestCase):
         with pytest.raises(AnsibleExitJson) as exc:
             my_obj.apply()
         assert exc.value.args[0]['changed']
-<<<<<<< HEAD
-=======
 
     @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_create_group_snapshot_with_names(self, mock_create_sf_connection):
         args = dict(
             hostname='host', username='user', password='pw',
-            volumes=['volA','555'], account_id='1'
+            volumes=['volA', '555'], account_id='1'
         )
         set_module_args(args)
         mock_create_sf_connection.return_value = MockSFConnection()
@@ -104,4 +98,3 @@ class TestMyModule(unittest.TestCase):
         with pytest.raises(AnsibleExitJson) as exc:
             my_obj.apply()
         assert exc.value.args[0]['changed']
->>>>>>> 04c21ff (Accept volume by name for group snapshot)

@@ -1,9 +1,10 @@
 #!/usr/bin/python
-
-# (c) 2017, NetApp, Inc
+# (c) 2020, NetApp, Inc
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-"""Create Group Snapshot for NetApp ElementSW"""
+'''
+Create Group Snapshot for NetApp ElementSW
+'''
 
 
 from __future__ import absolute_import, division, print_function
@@ -22,8 +23,8 @@ module: na_elementsw_group_snapshot
 short_description: NetApp Element Software Create Group Snapshot
 extends_documentation_fragment:
     - community.solidfire.netapp.solidfire
-version_added: 20.10.0
-author: NetApp Ansible Team
+version_added: 26.1.0
+author: scaleoutSean (@scaleoutsean)
 description:
   - Create a group snapshot across multiple volumes.
 
@@ -45,11 +46,13 @@ options:
     description:
       - Whether to enable remote replication for the created snapshots.
     type: bool
+    default: False
 
   retention:
     description:
       - Retention period as an HH:mm:ss string.
     type: str
+    default: null
 
   attributes:
     description:
@@ -154,35 +157,6 @@ class ElementSWGroupSnapshot(object):
                 retention=self.retention,
                 attributes=self.attributes,
             )
-            return result
-        except Exception as exc:
-            self.module.fail_json(msg='Error creating group snapshot: %s' % to_native(exc), exception=traceback.format_exc())
-
-    def apply(self):
-        if self.module.check_mode:
-            self.module.exit_json(changed=False, msg='Check mode: group snapshot not created')
-
-        result = self.create_group_snapshot()
-        # attempt to return a dictionary representation
-        try:
-            gs = result.groupSnapshot if hasattr(result, 'groupSnapshot') else result
-            # convert objects to dict if necessary
-            if hasattr(gs, '__dict__'):
-                gs = vars(gs)
-        except Exception:
-            gs = None
-
-        self.module.exit_json(changed=True, group_snapshot=gs)
-
-
-def main():
-    module = ElementSWGroupSnapshot()
-    module.apply()
-
-
-if __name__ == '__main__':
-    main()
-
             return result
         except Exception as exc:
             self.module.fail_json(msg='Error creating group snapshot: %s' % to_native(exc), exception=traceback.format_exc())
