@@ -37,6 +37,11 @@ jobs:
         run: |
           rm -rf .venv tests/output || true
 
+      - name: Install Python requirements
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
       - name: Debug workspace listing
         run: |
           pwd
