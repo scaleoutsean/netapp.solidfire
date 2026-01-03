@@ -1,18 +1,13 @@
 #!/usr/bin/python
-"""
-Create Group Snapshot for NetApp ElementSW
-"""
-
-#!/usr/bin/python
-"""
-Create Group Snapshot for NetApp ElementSW
-"""
+"""Create Group Snapshot for NetApp ElementSW"""
 
 from __future__ import absolute_import, division, print_function
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'certified'}
+ANSIBLE_METADATA = {
+    'metadata_version': '1.1',
+    'status': ['preview'],
+    'supported_by': 'certified',
+}
 
 DOCUMENTATION = '''
 
@@ -95,17 +90,18 @@ HAS_SF_SDK = netapp_utils.has_sf_sdk()
 class ElementSWGroupSnapshot(object):
     def __init__(self):
         self.argument_spec = netapp_utils.ontap_sf_host_argument_spec()
-        self.argument_spec.update(dict(
-          volumes=dict(required=True, type='list', elements='str'),
-          name=dict(required=False, type='str', default=None),
-          enable_remote_replication=dict(required=False, type='bool', default=False),
-          retention=dict(required=False, type='str', default=None),
-          attributes=dict(required=False, type='dict', default=None),
-          account_id=dict(required=False, type='str', default=None),
-        ))
+        self.argument_spec.update(
+            dict(
+                volumes=dict(required=True, type='list', elements='str'),
+                name=dict(required=False, type='str', default=None),
+                enable_remote_replication=dict(required=False, type='bool', default=False),
+                retention=dict(required=False, type='str', default=None),
+                attributes=dict(required=False, type='dict', default=None),
+                account_id=dict(required=False, type='str', default=None),
+            )
+        )
 
-        self.module = AnsibleModule(argument_spec=self.argument_spec,
-                                    supports_check_mode=True)
+        self.module = AnsibleModule(argument_spec=self.argument_spec, supports_check_mode=True)
 
         params = self.module.params
         self.volumes = params['volumes']
@@ -125,35 +121,37 @@ class ElementSWGroupSnapshot(object):
         self.elementsw_helper = NaElementSWModule(self.sfe)
 
     def resolve_volume_ids(self):
-      resolved = []
-      for v in self.volumes:
-        # numeric ids: accept directly
-        if isinstance(v, int) or (isinstance(v, str) and str(v).isdigit()):
-          resolved.append(int(v))
-          continue
+        resolved = []
+        for v in self.volumes:
+            # numeric ids: accept directly
+            if isinstance(v, int) or (isinstance(v, str) and str(v).isdigit()):
+                resolved.append(int(v))
+                continue
 
-        # names: require account_id to resolve
-        if self.account_id is None:
-          self.module.fail_json(msg='Volume name provided but no account_id given to resolve names: %s' % to_native(v))
+            # names: require account_id to resolve
+            if self.account_id is None:
+                self.module.fail_json(msg='Volume name provided but no account_id given to resolve names: %s' % to_native(v))
 
-        vol_id = self.elementsw_helper.volume_exists(v, self.account_id)
-        if vol_id is None:
-          self.module.fail_json(msg='Volume name not found: %s (account=%s)' % (to_native(v), to_native(self.account_id)))
-        resolved.append(int(vol_id))
-      return resolved
+            vol_id = self.elementsw_helper.volume_exists(v, self.account_id)
+            if vol_id is None:
+                self.module.fail_json(msg='Volume name not found: %s (account=%s)' % (to_native(v), to_native(self.account_id)))
+            resolved.append(int(vol_id))
+        return resolved
 
     def create_group_snapshot(self):
         vols = self.resolve_volume_ids()
         try:
-            result = self.sfe.create_group_snapshot(volumes=vols,
-                                                   name=self.name,
-                                                   enable_remote_replication=self.enable_remote_replication,
-                                                   retention=self.retention,
-                                                   attributes=self.attributes)
+            result = self.sfe.create_group_snapshot(
+                volumes=vols,
+                name=self.name,
+                enable_remote_replication=self.enable_remote_replication,
+                retention=self.retention,
+                attributes=self.attributes,
+            )
             return result
         except Exception as exc:
             self.module.fail_json(msg='Error creating group snapshot: %s' % to_native(exc), exception=traceback.format_exc())
-                                                                                                                           
+
     def apply(self):
         if self.module.check_mode:
             self.module.exit_json(changed=False, msg='Check mode: group snapshot not created')
@@ -174,6 +172,10 @@ class ElementSWGroupSnapshot(object):
 def main():
     module = ElementSWGroupSnapshot()
     module.apply()
+
+
+if __name__ == '__main__':
+    main()
 
             return result
         except Exception as exc:

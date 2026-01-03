@@ -135,7 +135,7 @@ EXAMPLES = """
        state: absent
        name: AnsibleVol
        account_id: 2
-    purge: False
+           purge: False
 """
 
 RETURN = """
