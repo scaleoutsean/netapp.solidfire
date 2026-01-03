@@ -59,6 +59,14 @@ class MockSFConnection(object):
         group = self.Bunch(groupSnapshotID=999, name=name, members=members)
         return self.Bunch(groupSnapshot=group)
 
+<<<<<<< HEAD
+=======
+    def list_volumes_for_account(self, account_id=None):
+        # return a single volume named 'volA' with id 555 for resolution tests
+        v = self.Bunch(name='volA', volume_id=555, delete_time='')
+        return self.Bunch(volumes=[v])
+
+>>>>>>> 04c21ff (Accept volume by name for group snapshot)
 
 class TestMyModule(unittest.TestCase):
 
@@ -81,3 +89,19 @@ class TestMyModule(unittest.TestCase):
         with pytest.raises(AnsibleExitJson) as exc:
             my_obj.apply()
         assert exc.value.args[0]['changed']
+<<<<<<< HEAD
+=======
+
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
+    def test_create_group_snapshot_with_names(self, mock_create_sf_connection):
+        args = dict(
+            hostname='host', username='user', password='pw',
+            volumes=['volA','555'], account_id='1'
+        )
+        set_module_args(args)
+        mock_create_sf_connection.return_value = MockSFConnection()
+        my_obj = my_module()
+        with pytest.raises(AnsibleExitJson) as exc:
+            my_obj.apply()
+        assert exc.value.args[0]['changed']
+>>>>>>> 04c21ff (Accept volume by name for group snapshot)

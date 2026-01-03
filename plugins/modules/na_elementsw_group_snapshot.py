@@ -3,6 +3,11 @@
 Create Group Snapshot for NetApp ElementSW
 """
 
+#!/usr/bin/python
+"""
+Create Group Snapshot for NetApp ElementSW
+"""
+
 from __future__ import absolute_import, division, print_function
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
@@ -24,7 +29,8 @@ description:
 options:
   volumes:
     description:
-      - List of volume IDs to include in the group snapshot. Volume IDs must be integers or numeric strings.
+      - List of volume IDs or names to include in the group snapshot. Volume IDs must be integers or numeric strings.
+      - If volume names are used, provide `account_id` so names can be resolved to IDs.
     required: true
     type: list
     elements: str
@@ -48,6 +54,11 @@ options:
     description:
       - Optional attributes to store with the group snapshot.
     type: dict
+
+  account_id:
+    description:
+      - Optional account id or name to resolve volume names to IDs. Required when using volume names.
+    type: str
 
 '''
 
@@ -85,11 +96,12 @@ class ElementSWGroupSnapshot(object):
     def __init__(self):
         self.argument_spec = netapp_utils.ontap_sf_host_argument_spec()
         self.argument_spec.update(dict(
-            volumes=dict(required=True, type='list', elements='str'),
-            name=dict(required=False, type='str', default=None),
-            enable_remote_replication=dict(required=False, type='bool', default=False),
-            retention=dict(required=False, type='str', default=None),
-            attributes=dict(required=False, type='dict', default=None),
+          volumes=dict(required=True, type='list', elements='str'),
+          name=dict(required=False, type='str', default=None),
+          enable_remote_replication=dict(required=False, type='bool', default=False),
+          retention=dict(required=False, type='str', default=None),
+          attributes=dict(required=False, type='dict', default=None),
+          account_id=dict(required=False, type='str', default=None),
         ))
 
         self.module = AnsibleModule(argument_spec=self.argument_spec,
@@ -101,6 +113,7 @@ class ElementSWGroupSnapshot(object):
         self.enable_remote_replication = params['enable_remote_replication']
         self.retention = params['retention']
         self.attributes = params['attributes']
+        self.account_id = params.get('account_id')
 
         if HAS_SF_SDK is False:
             self.module.fail_json(msg="Unable to import the SolidFire Python SDK")
@@ -112,14 +125,22 @@ class ElementSWGroupSnapshot(object):
         self.elementsw_helper = NaElementSWModule(self.sfe)
 
     def resolve_volume_ids(self):
-        resolved = []
-        for v in self.volumes:
-            # accept numeric ids only; conversion from names requires account context
-            if isinstance(v, int) or (isinstance(v, str) and str(v).isdigit()):
-                resolved.append(int(v))
-            else:
-                self.module.fail_json(msg='Group snapshot volumes must be volume IDs (int), got: %s' % to_native(v))
-        return resolved
+      resolved = []
+      for v in self.volumes:
+        # numeric ids: accept directly
+        if isinstance(v, int) or (isinstance(v, str) and str(v).isdigit()):
+          resolved.append(int(v))
+          continue
+
+        # names: require account_id to resolve
+        if self.account_id is None:
+          self.module.fail_json(msg='Volume name provided but no account_id given to resolve names: %s' % to_native(v))
+
+        vol_id = self.elementsw_helper.volume_exists(v, self.account_id)
+        if vol_id is None:
+          self.module.fail_json(msg='Volume name not found: %s (account=%s)' % (to_native(v), to_native(self.account_id)))
+        resolved.append(int(vol_id))
+      return resolved
 
     def create_group_snapshot(self):
         vols = self.resolve_volume_ids()
@@ -129,6 +150,31 @@ class ElementSWGroupSnapshot(object):
                                                    enable_remote_replication=self.enable_remote_replication,
                                                    retention=self.retention,
                                                    attributes=self.attributes)
+            return result
+        except Exception as exc:
+            self.module.fail_json(msg='Error creating group snapshot: %s' % to_native(exc), exception=traceback.format_exc())
+                                                                                                                           
+    def apply(self):
+        if self.module.check_mode:
+            self.module.exit_json(changed=False, msg='Check mode: group snapshot not created')
+
+        result = self.create_group_snapshot()
+        # attempt to return a dictionary representation
+        try:
+            gs = result.groupSnapshot if hasattr(result, 'groupSnapshot') else result
+            # convert objects to dict if necessary
+            if hasattr(gs, '__dict__'):
+                gs = vars(gs)
+        except Exception:
+            gs = None
+
+        self.module.exit_json(changed=True, group_snapshot=gs)
+
+
+def main():
+    module = ElementSWGroupSnapshot()
+    module.apply()
+
             return result
         except Exception as exc:
             self.module.fail_json(msg='Error creating group snapshot: %s' % to_native(exc), exception=traceback.format_exc())
