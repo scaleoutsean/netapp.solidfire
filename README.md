@@ -1,8 +1,10 @@
-netapp.solidfire
+[![CI](https://github.com/scaleoutsean/netapp.solidfire/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/scaleoutsean/netapp.solidfire/actions/workflows/main.yml) [![Coverage](https://github.com/scaleoutsean/netapp.solidfire/actions/workflows/coverage.yml/badge.svg?branch=master)](https://github.com/scaleoutsean/netapp.solidfire/actions/workflows/coverage.yml)
+
+# netapp.solidfire
 
 Community SolidFire Collection
 
-Copyright (c) 2019 scaleoutSean, NetApp, Inc. All rights reserved.
+Copyright (c) 2026 scaleoutSean, NetApp, Inc. All rights reserved.
 
 # Installation
 
