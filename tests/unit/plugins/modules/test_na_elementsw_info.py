@@ -338,6 +338,65 @@ class TestMyModule(unittest.TestCase):
         assert msg in exc.value.args[0]['msg']
 
     @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
+    def test_info_cluster_initiators_success(self, mock_create_sf_connection):
+        ''' gather cluster_initiators subset '''
+        args = dict(self.ARGS)
+        args['gather_subsets'] = ['cluster_initiators']
+        set_module_args(args)
+        mock_create_sf_connection.return_value = MockSFConnection()
+        my_obj = my_module()
+        with pytest.raises(AnsibleExitJson) as exc:
+            my_obj.apply()
+        print(exc.value.args[0])
+        assert 'cluster_initiators' in exc.value.args[0]['info']
+        initiators = exc.value.args[0]['info']['cluster_initiators']['initiators']
+        assert initiators[0]['alias'] == 's194'
+        assert 'list_initiators' in my_obj.sfe_node.called
+
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
+    def test_info_cluster_initiators_filter_success(self, mock_create_sf_connection):
+        ''' filter on initiator alias - successful match '''
+        args = dict(self.ARGS)
+        args['gather_subsets'] = ['cluster_initiators']
+        args['filter'] = dict(alias='s194')
+        set_module_args(args)
+        mock_create_sf_connection.return_value = MockSFConnection()
+        my_obj = my_module()
+        with pytest.raises(AnsibleExitJson) as exc:
+            my_obj.apply()
+        initiators = exc.value.args[0]['info']['cluster_initiators']['initiators']
+        assert initiators[0]['alias'] == 's194'
+
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
+    def test_info_cluster_initiators_filter_bad_key_ignored(self, mock_create_sf_connection):
+        ''' filter on bad key - ignored when fail_on_key_not_found is False '''
+        args = dict(self.ARGS)
+        args['gather_subsets'] = ['cluster_initiators']
+        args['filter'] = dict(bad_key='x')
+        args['fail_on_key_not_found'] = False
+        set_module_args(args)
+        mock_create_sf_connection.return_value = MockSFConnection()
+        my_obj = my_module()
+        with pytest.raises(AnsibleExitJson) as exc:
+            my_obj.apply()
+        assert exc.value.args[0]['info']['cluster_initiators']['initiators'] == list()
+
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
+    def test_info_cluster_initiators_filter_record_not_found_error(self, mock_create_sf_connection):
+        ''' filter on alias with no match - force error on empty '''
+        args = dict(self.ARGS)
+        args['gather_subsets'] = ['cluster_initiators']
+        args['filter'] = dict(alias='noexist')
+        args['fail_on_record_not_found'] = True
+        set_module_args(args)
+        mock_create_sf_connection.return_value = MockSFConnection()
+        my_obj = my_module()
+        with pytest.raises(AnsibleFailJson) as exc:
+            my_obj.apply()
+        msg = 'Error: no match for'
+        assert msg in exc.value.args[0]['msg']
+
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_connection_error(self, mock_create_sf_connection):
         ''' filter on key, value - no match - force error on empty '''
         args = dict(self.ARGS)  # deep copy as other tests can modify args
