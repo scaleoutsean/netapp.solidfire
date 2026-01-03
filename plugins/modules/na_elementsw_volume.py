@@ -96,6 +96,11 @@ options:
         - If unspecified, the access settings of the clone will be the same as the source.
         choices: ['readOnly', 'readWrite', 'locked', 'replicationTarget']
         type: str
+    purge:
+        description:
+        - When deleting a volume (state=absent), whether to purge the deleted volume.
+        - If C(True), the module will attempt to purge the volume after deletion. Default is C(False).
+        type: bool
 '''
 
 EXAMPLES = """
@@ -130,6 +135,7 @@ EXAMPLES = """
        state: absent
        name: AnsibleVol
        account_id: 2
+    purge: False
 """
 
 RETURN = """
@@ -189,6 +195,7 @@ class ElementSWVolume(object):
 
             access=dict(required=False, type='str', default=None,
                         choices=['readOnly', 'readWrite', 'locked', 'replicationTarget']),
+            purge=dict(required=False, type='bool', default=False),
         ))
 
         self.module = AnsibleModule(
@@ -213,6 +220,7 @@ class ElementSWVolume(object):
         self.qos_policy_name = param['qos_policy_name']
         self.attributes = param['attributes']
         self.access = param['access']
+        self.purge = param['purge']
         self.size_unit = param['size_unit']
         if param['size'] is not None:
             self.size = param['size'] * self._size_unit_map[self.size_unit]
@@ -305,8 +313,10 @@ class ElementSWVolume(object):
         """
         try:
             self.sfe.delete_volume(volume_id=volume_id)
-            self.sfe.purge_deleted_volume(volume_id=volume_id)
-            # Delete method will delete and also purge the volume instead of moving the volume state to inactive.
+            # Optionally purge the deleted volume
+            if self.purge:
+                self.sfe.purge_deleted_volume(volume_id=volume_id)
+            # Delete method will delete the volume; purge is optional based on `purge` flag.
 
         except Exception as err:
             # Throwing the exact error message instead of generic error message

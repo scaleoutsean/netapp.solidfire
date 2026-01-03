@@ -47,8 +47,9 @@ https://docs.ansible.com/ansible/devel/collections/netapp/elementsw/ [pre-fork]
 
 ### New
 
-  - `na_elementsw_info` - add `cluster_initiators`.
-  - CI/Coverage uses Ansible Core 2.20.1 and Python 3.12
+  - `na_elementsw_info` - add `cluster_initiators` ([PR #11](https://github.com/ansible-collections/netapp.elementsw/pull/11))
+  - `na_elementsw_volume` - add `purge` option ([issue #2](https://github.com/ansible-collections/netapp.elementsw/issues/2))
+  - CI/Coverage uses Ansible Core 2.20.1, Python 3.12 and SolidFire Python SDK 12
 
 ### Minor changes
 

@@ -214,6 +214,23 @@ class TestMyModule(unittest.TestCase):
         ''' removing a volume '''
         args = dict(self.ARGS)
         args['state'] = 'absent'
+        # default purge is False
+        args.pop('qos')         # parameters are mutually exclusive: qos|qos_policy_name
+        set_module_args(args)
+        # my_obj.sfe will be assigned a MockSFConnection object:
+        mock_create_sf_connection.return_value = MockSFConnection()
+        my_obj = my_module()
+        with pytest.raises(AnsibleExitJson) as exc:
+            my_obj.apply()
+        print(exc.value.args[0])
+        assert exc.value.args[0]['changed']
+
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
+    def test_delete_volume_with_purge(self, mock_create_sf_connection):
+        ''' removing a volume and purging it '''
+        args = dict(self.ARGS)
+        args['state'] = 'absent'
+        args['purge'] = True
         args.pop('qos')         # parameters are mutually exclusive: qos|qos_policy_name
         set_module_args(args)
         # my_obj.sfe will be assigned a MockSFConnection object:
