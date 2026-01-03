@@ -1,0 +1,9 @@
+type: release
+version: "26.1.0"
+date: "2026-01-03"
+added:
+  - na_elementsw_group_snapshot: "Add group snapshot module (accepts names and IDs)"
+changed:
+  - na_elementsw_volume: "Add `purge` option"
+fixed:
+  - "Various doc, lint, and test harness fixes; CI now passes under ansible-core 2.20.1 / Python 3.12"
