@@ -32,13 +32,12 @@ description:
 options:
   gather_subsets:
     description:
-      - list of subsets to gather from target cluster or node
-      - supported values
-    - node_config, cluster_accounts, cluster_nodes, cluster_drives, cluster_initiators
-      - additional values
-      - all - for all subsets,
-      - all_clusters - all subsets at cluster scope,
-      - all_nodes - all subsets at node scope
+            - list of subsets to gather from target cluster or node
+            - "Supported values: node_config, cluster_accounts, cluster_nodes, cluster_drives, cluster_initiators"
+            - "Additional values:"
+            - "  all - all subsets"
+            - "  all_clusters - all subsets at cluster scope"
+            - "  all_nodes - all subsets at node scope"
     type: list
     elements: str
     default: ['all']

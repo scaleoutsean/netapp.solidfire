@@ -1,6 +1,6 @@
 [![CI](https://github.com/scaleoutsean/netapp.solidfire/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/scaleoutsean/netapp.solidfire/actions/workflows/main.yml) [![Coverage](https://github.com/scaleoutsean/netapp.solidfire/actions/workflows/coverage.yml/badge.svg?branch=master)](https://github.com/scaleoutsean/netapp.solidfire/actions/workflows/coverage.yml)
 
-# netapp.solidfire
+# community.solidfire
 
 Community SolidFire Collection
 
@@ -45,11 +45,15 @@ https://docs.ansible.com/ansible/devel/collections/netapp/elementsw/ [pre-fork]
 
 ## 26.1.0
 
+### New
+
+  - `na_elementsw_info` - add `cluster_initiators`.
+  - CI/Coverage uses Ansible Core 2.20.1 and Python 3.12
+
 ### Minor changes
 
-  - na_elementsw_info - add ``cluster_initiators``.
   - `autopep8` fix line length (above 160).
-  - Various style fixes for `ansible-test sanity`
+  - Various style fixes for `ansible-test sanity`.
 
 ## 21.7.0
 

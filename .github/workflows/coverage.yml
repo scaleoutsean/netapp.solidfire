@@ -1,4 +1,4 @@
-name: NetApp.elementsw Ansible Coverage
+name: community.solidfire Ansible Coverage
 
 on:
   push:
