@@ -4,5 +4,6 @@ ansible_collections/netapp/elementsw/.venv/
 ansible_collections/netapp/elementsw/tests/output/
 tests/output/
 tests/unit/plugins/modules/__pycache__/
+plugins/modules/__pycache__/
 scripts/
 TESTING.md

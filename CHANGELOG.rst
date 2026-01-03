@@ -18,6 +18,7 @@ Major Changes
 - `na_elementsw_volume` - add `purge` option ([issue #2](https://github.com/ansible-collections/netapp.elementsw/issues/2))
 - `na_elementsw_group_snapshot` - add `GroupSnapshot` ([issue #5](https://github.com/ansible-collections/netapp.elementsw/issues/5))
 - CI/Coverage uses Ansible Core 2.20.1, Python 3.12 and SolidFire Python SDK 12.3
+- `na_elementsw_backup_s3` - add S3 backup module (StartBulkVolumeRead to S3-compatible endpoints)
 
 Minor Changes
 -------------

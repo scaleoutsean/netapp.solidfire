@@ -16,6 +16,8 @@ ANSIBLE_METADATA = {
     'supported_by': 'certified',
 }
 
+__metaclass__ = type
+
 DOCUMENTATION = '''
 
 module: na_elementsw_group_snapshot
