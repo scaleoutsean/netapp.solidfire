@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 # (c) 2017, NetApp, Inc
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
@@ -96,11 +95,13 @@ options:
         - If unspecified, the access settings of the clone will be the same as the source.
         choices: ['readOnly', 'readWrite', 'locked', 'replicationTarget']
         type: str
+
     purge:
         description:
         - When deleting a volume (state=absent), whether to purge the deleted volume.
         - If C(True), the module will attempt to purge the volume after deletion. Default is C(False).
         type: bool
+        default: False
 '''
 
 EXAMPLES = """
@@ -135,7 +136,7 @@ EXAMPLES = """
        state: absent
        name: AnsibleVol
        account_id: 2
-           purge: False
+       purge: False
 """
 
 RETURN = """

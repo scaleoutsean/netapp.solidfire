@@ -15,7 +15,7 @@ import ansible_collections.community.solidfire.plugins.module_utils.netapp as ne
 if not netapp_utils.has_sf_sdk():
     pytestmark = pytest.mark.skip('skipping as missing required SolidFire Python SDK')
 
-from ansible_collections.community.solidfire.plugins.modules.na_elementsw_group_snapshot     import ElementSWGroupSnapshot as my_module  # module under test
+from ansible_collections.community.solidfire.plugins.modules.na_elementsw_group_snapshot import ElementSWGroupSnapshot as my_module  # module under test
 
 
 def set_module_args(args):
