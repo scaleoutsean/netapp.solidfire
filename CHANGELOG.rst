@@ -14,14 +14,16 @@ Major Changes
 -------------
 
 - Fork for updates as NetApp stopped maintaining Ansible modules for ElementSW, and rename to SolidFire
-- Update to use Python 3.12
-- Update to use Ansible 2.20
-- Use `autopep8` to fix formatting issues in codebase
+- `na_elementsw_info` - add `cluster_initiators` ([pull request #11](https://github.com/ansible-collections/netapp.elementsw/pull/11))
+- `na_elementsw_volume` - add `purge` option ([issue #2](https://github.com/ansible-collections/netapp.elementsw/issues/2))
+- `na_elementsw_group_snapshot` - add `GroupSnapshot` ([issue #5](https://github.com/ansible-collections/netapp.elementsw/issues/5))
+- CI/Coverage uses Ansible Core 2.20.1, Python 3.12 and SolidFire Python SDK 12.3
 
 Minor Changes
 -------------
 
-- Add cluster_initatiors_info to na_elementsw_info module ([this PR](https://github.com/ansible-collections/netapp.elementsw/pull/11))
+- Update documentation and examples to use `community.solidfire` collection name
+- Update `galaxy.yml` to use `community.solidfire` collection name
 
 
 v21.7.0
