@@ -175,7 +175,9 @@ class ElementSWInfo(object):
             cluster_accounts=self.sfe_cluster.list_accounts,
             cluster_drives=self.sfe_cluster.list_drives,
             cluster_nodes=self.sfe_cluster.list_all_nodes,
-            cluster_initiators=self.sfe_cluster.list_initiators
+            cluster_initiators=self.sfe_cluster.list_initiators,
+            cluster_active_volumes=self.sfe_cluster.list_active_volumes,
+            cluster_deleted_volumes=self.sfe_cluster.list_deleted_volumes
         )
         self.methods = dict(self.node_methods)
         self.methods.update(self.cluster_methods)
