@@ -12,9 +12,15 @@ from ansible.module_utils._text import to_bytes
 from ansible_collections.community.solidfire.tests.unit.compat import unittest
 from ansible_collections.community.solidfire.tests.unit.compat.mock import patch
 import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
+from unittest.mock import MagicMock
 
+# Validation of HAS_SDK check is done in the module, so we mock it here
 if not netapp_utils.has_sf_sdk():
-    pytestmark = pytest.mark.skip('skipping as missing required SolidFire Python SDK')
+    netapp_utils.solidfire = MagicMock()
+    class MockApiConnectionError(Exception):
+        pass
+    netapp_utils.solidfire.common.ApiConnectionError = MockApiConnectionError
+    netapp_utils.has_sf_sdk = lambda: True
 
 from ansible_collections.community.solidfire.plugins.modules.na_elementsw_info \
     import ElementSWInfo as my_module  # module under test
@@ -128,6 +134,52 @@ class MockSFConnection(object):
         })
         initiator_list = self.Bunch(initiators=initiators)
         return initiator_list
+
+    def list_active_volumes(self, *args, **kwargs):  # pylint: disable=unused-argument
+        ''' build active volume list '''
+        self.record(repr(args), repr(kwargs))
+        volumes = list()
+        volumes.append({
+            "access": "readWrite",
+            "accountID": 1,
+            "attributes": {},
+            "blockSize": 4096,
+            "createTime": "2026-02-02T05:17:38Z",
+            "currentProtectionScheme": "singleHelix",
+            "deleteTime": "",
+            "enable512e": True,
+            "enableSnapMirrorReplication": False,
+            "iqn": "iqn.2010-01.com.solidfire:juut.import-raw-vol.716",
+            "name": "import-raw-vol",
+            "status": "active",
+            "totalSize": 1073741824,
+            "volumeID": 716,
+        })
+        volume_list = self.Bunch(volumes=volumes)
+        return volume_list
+
+    def list_deleted_volumes(self, *args, **kwargs):  # pylint: disable=unused-argument
+        ''' build deleted volume list '''
+        self.record(repr(args), repr(kwargs))
+        volumes = list()
+        volumes.append({
+            "access": "readWrite",
+            "accountID": 1,
+            "attributes": {},
+            "blockSize": 4096,
+            "createTime": "2026-02-02T05:17:38Z",
+            "currentProtectionScheme": "singleHelix",
+            "deleteTime": "2026-02-04T05:17:38Z",
+            "enable512e": True,
+            "enableSnapMirrorReplication": False,
+            "iqn": "iqn.2010-01.com.solidfire:juut.import-raw-vol.717",
+            "name": "volume-deleted",
+            "status": "deleted",
+            "totalSize": 1073741824,
+            "volumeID": 717,
+        })
+        volume_list = self.Bunch(volumes=volumes)
+        return volume_list
 
     def get_config(self, *args, **kwargs):  # pylint: disable=unused-argument
         self.record(repr(args), repr(kwargs))
@@ -395,6 +447,40 @@ class TestMyModule(unittest.TestCase):
             my_obj.apply()
         msg = 'Error: no match for'
         assert msg in exc.value.args[0]['msg']
+
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
+    def test_info_active_volumes_success(self, mock_create_sf_connection):
+        ''' gather cluster_active_volumes subset '''
+        args = dict(self.ARGS)
+        args['gather_subsets'] = ['cluster_active_volumes']
+        set_module_args(args)
+        mock_create_sf_connection.return_value = MockSFConnection()
+        my_obj = my_module()
+        with pytest.raises(AnsibleExitJson) as exc:
+            my_obj.apply()
+        print(exc.value.args[0])
+        assert 'cluster_active_volumes' in exc.value.args[0]['info']
+        volumes = exc.value.args[0]['info']['cluster_active_volumes']['volumes']
+        assert volumes[0]['name'] == 'import-raw-vol'
+        assert volumes[0]['volumeID'] == 716
+        assert 'list_active_volumes' in my_obj.sfe_node.called
+
+    @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
+    def test_info_deleted_volumes_success(self, mock_create_sf_connection):
+        ''' gather cluster_deleted_volumes subset '''
+        args = dict(self.ARGS)
+        args['gather_subsets'] = ['cluster_deleted_volumes']
+        set_module_args(args)
+        mock_create_sf_connection.return_value = MockSFConnection()
+        my_obj = my_module()
+        with pytest.raises(AnsibleExitJson) as exc:
+            my_obj.apply()
+        print(exc.value.args[0])
+        assert 'cluster_deleted_volumes' in exc.value.args[0]['info']
+        volumes = exc.value.args[0]['info']['cluster_deleted_volumes']['volumes']
+        assert volumes[0]['name'] == 'volume-deleted'
+        assert volumes[0]['status'] == 'deleted'
+        assert 'list_deleted_volumes' in my_obj.sfe_node.called
 
     @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_connection_error(self, mock_create_sf_connection):
