@@ -17,6 +17,7 @@ from unittest.mock import MagicMock
 # Validation of HAS_SDK check is done in the module, so we mock it here
 if not netapp_utils.has_sf_sdk():
     netapp_utils.solidfire = MagicMock()
+
     class MockApiConnectionError(Exception):
         pass
     netapp_utils.solidfire.common.ApiConnectionError = MockApiConnectionError
@@ -64,6 +65,7 @@ class MockSFConnection(object):
 
     class Bunch(object):  # pylint: disable=too-few-public-methods
         ''' create object with arbitrary attributes '''
+
         def __init__(self, **kw):
             ''' called with (k1=v1, k2=v2), creates obj.k1, obj.k2 with values v1, v2 '''
             setattr(self, '__dict__', kw)
@@ -354,7 +356,8 @@ class TestMyModule(unittest.TestCase):
         with pytest.raises(AnsibleExitJson) as exc:
             my_obj.apply()
         print(exc.value.args[0])
-        assert exc.value.args[0]['info']['cluster_accounts']['accounts'] == list()
+        assert exc.value.args[0]['info']['cluster_accounts']['accounts'] == list(
+        )
 
     @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_info_filter_record_not_found(self, mock_create_sf_connection):
@@ -370,7 +373,8 @@ class TestMyModule(unittest.TestCase):
         with pytest.raises(AnsibleExitJson) as exc:
             my_obj.apply()
         print(exc.value.args[0])
-        assert exc.value.args[0]['info']['cluster_accounts']['accounts'] == list()
+        assert exc.value.args[0]['info']['cluster_accounts']['accounts'] == list(
+        )
 
     @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_info_filter_record_not_found_error(self, mock_create_sf_connection):
@@ -431,7 +435,8 @@ class TestMyModule(unittest.TestCase):
         my_obj = my_module()
         with pytest.raises(AnsibleExitJson) as exc:
             my_obj.apply()
-        assert exc.value.args[0]['info']['cluster_initiators']['initiators'] == list()
+        assert exc.value.args[0]['info']['cluster_initiators']['initiators'] == list(
+        )
 
     @patch('ansible_collections.community.solidfire.plugins.module_utils.netapp.create_sf_connection')
     def test_info_cluster_initiators_filter_record_not_found_error(self, mock_create_sf_connection):
@@ -488,7 +493,8 @@ class TestMyModule(unittest.TestCase):
         args = dict(self.ARGS)  # deep copy as other tests can modify args
         set_module_args(args)
         # force a connection exception
-        mock_create_sf_connection.side_effect = netapp_utils.solidfire.common.ApiConnectionError('testme')
+        mock_create_sf_connection.side_effect = netapp_utils.solidfire.common.ApiConnectionError(
+            'testme')
         with pytest.raises(AnsibleFailJson) as exc:
             my_module()
         print(exc.value.args[0])
