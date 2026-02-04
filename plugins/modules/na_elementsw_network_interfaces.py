@@ -250,11 +250,10 @@ msg:
 
 __metaclass__ = type
 
-
-import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
-from ansible.module_utils._text import to_native
-from ansible.module_utils.basic import AnsibleModule
 import traceback
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils._text import to_native
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
 
 
 HAS_SF_SDK = netapp_utils.has_sf_sdk()

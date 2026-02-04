@@ -89,16 +89,15 @@ group_snapshot:
 
 '''
 
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils._text import to_native
+import traceback
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
+from ansible_collections.community.solidfire.plugins.module_utils.netapp_elementsw_module import NaElementSWModule
+
 
 HAS_SF_SDK = netapp_utils.has_sf_sdk()
 
-
-
-from ansible_collections.community.solidfire.plugins.module_utils.netapp_elementsw_module import NaElementSWModule
-import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
-import traceback
-from ansible.module_utils._text import to_native
-from ansible.module_utils.basic import AnsibleModule
 
 class ElementSWGroupSnapshot(object):
     def __init__(self):

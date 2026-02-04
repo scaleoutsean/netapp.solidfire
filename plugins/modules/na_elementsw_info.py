@@ -109,10 +109,9 @@ debug:
 
 __metaclass__ = type
 
-
-from ansible_collections.community.solidfire.plugins.module_utils.netapp_module import NetAppModule
-import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
 from ansible.module_utils.basic import AnsibleModule
+import ansible_collections.community.solidfire.plugins.module_utils.netapp as netapp_utils
+from ansible_collections.community.solidfire.plugins.module_utils.netapp_module import NetAppModule
 
 
 HAS_SF_SDK = netapp_utils.has_sf_sdk()
