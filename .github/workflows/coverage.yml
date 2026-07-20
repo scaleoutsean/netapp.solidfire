@@ -20,8 +20,8 @@ jobs:
         with:
           python-version: 3.12
 
-      - name: Install Ansible Core 2.20.1
-        run: pip install 'ansible-core==2.20.1' --disable-pip-version-check
+      - name: Install Ansible Core 2.21.2
+        run: pip install 'ansible-core==2.21.2' --disable-pip-version-check
 
       - name: Install Python requirements
         run: |
@@ -44,7 +44,7 @@ jobs:
           rsync -av . ansible_collections/community/solidfire/ --exclude ansible_collections/community/solidfire/
 
       - name: Run Unit Tests
-        # https://docs.ansible.com/projects/ansible-core/2.20/porting_guides/porting_guide_core_2.20.html
+        # https://docs.ansible.com/projects/ansible-core/2.21/porting_guides/porting_guide_core_2.21.html
         # Minimum version: python 3.12+
         run: ansible-test units --coverage --color --docker --python 3.12
         working-directory: ansible_collections/community/solidfire/

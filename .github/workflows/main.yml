@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         ansible:
-          - stable-2.20
+          - stable-2.21
           - devel
 
     steps:
@@ -26,8 +26,8 @@ jobs:
           python-version: 3.12
 
       - name: Install ansible-core for stable matrix
-        if: matrix.ansible == 'stable-2.20'
-        run: pip install 'ansible-core==2.20.1' --disable-pip-version-check
+        if: matrix.ansible == 'stable-2.21'
+        run: pip install 'ansible-core==2.21.2' --disable-pip-version-check
 
       - name: Install ansible from devel for devel matrix
         if: matrix.ansible == 'devel'
