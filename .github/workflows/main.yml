@@ -12,9 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ansible:
-          - stable-2.21
-          - devel
+        include:
+          - ansible: stable-2.21
+            python: '3.12'
+          # ansible/ansible devel currently resolves ansible-core requiring Python >= 3.13
+          - ansible: devel
+            python: '3.13'
 
     steps:
       - name: Check out code
@@ -22,8 +25,8 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v2
-        with:          
-          python-version: 3.12
+        with:
+          python-version: ${{ matrix.python }}
 
       - name: Install ansible-core for stable matrix
         if: matrix.ansible == 'stable-2.21'
@@ -54,8 +57,8 @@ jobs:
           rsync -av . ansible_collections/community/solidfire/ --exclude ansible_collections/community/solidfire/
 
       - name: Run sanity tests Solidfire
-        run: ansible-test sanity --docker -v --color --python 3.12
+        run: ansible-test sanity --docker -v --color --python ${{ matrix.python }}
         working-directory: ansible_collections/community/solidfire/
       - name: Run Unit Tests
-        run: ansible-test units --docker -v --color --python 3.12
+        run: ansible-test units --docker -v --color --python ${{ matrix.python }}
         working-directory: ansible_collections/community/solidfire/
